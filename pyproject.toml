@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stromatolite-growth"
+version = "1.0.0"
+description = "Stromatolite Growth Simulation"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "ipykernel",
+  "matplotlib",
+  "numpy"
+]
+
+[tool.setuptools]
+py-modules = []
