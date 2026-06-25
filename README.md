@@ -6,6 +6,13 @@
 
 # StromatoliteGrowth - Stromatolite Growth Modelling
 
+<figure>
+    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/1d-column-snapshots.png" width="100%">
+    <figcaption>
+        Development of the development of a 1-D simulated stromatolite
+    </figcaption>
+</figure>
+
 This project explores the growth of stromatolites through a computational model that combines biological growth, sediment deposition and environmental processes.
 
 The work began following a visit to the Oxford University Museum of Natural History and a renewed interest in some of Earth’s earliest evidence of life. Rather than viewing stromatolites simply as layered rock structures, the project asks a computational question:
