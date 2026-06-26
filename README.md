@@ -7,9 +7,9 @@
 # StromatoliteGrowth - Stromatolite Growth Modelling
 
 <figure>
-    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/1d-column-snapshots.png" width="100%">
+    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/2d-surface-snapshots.png" width="100%">
     <figcaption>
-        Development of the development of a 1-D simulated stromatolite
+        Development of a simulated stromatolite cross-section using the two-dimensional growth model
     </figcaption>
 </figure>
 
@@ -45,10 +45,11 @@ The project currently includes:
 - Water-depth-dependent light attenuation
 - Animated model outputs
 - Parameter-driven experimentation
+- Spatial 2D growth
 
 Future directions may include:
 
-- Spatial (2D/3D) growth
+- Spatial 3D growth
 - Hydrodynamic influences on sediment transport
 - Multiple microbial communities
 - Geochemical controls on growth
