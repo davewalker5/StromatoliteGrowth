@@ -7,9 +7,9 @@
 # StromatoliteGrowth - Stromatolite Growth Modelling
 
 <figure>
-    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/2d-surface-snapshots.png" width="100%">
+    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/3d-final-surface-render.png" width="100%">
     <figcaption>
-        Development of a simulated stromatolite cross-section using the two-dimensional growth model
+        Emergent three-dimensional stromatolite surface produced by the rectangular growth model
     </figcaption>
 </figure>
 
@@ -21,7 +21,9 @@ The work began following a visit to the Oxford University Museum of Natural Hist
 
 The model treats stromatolite formation as a dynamic system in which microbial mat growth competes with sediment accumulation while responding to changing environmental conditions such as light availability, water depth, sediment supply and seasonal variation.
 
-The emphasis is not on reproducing any particular fossil exactly. Instead, the project investigates how increasingly realistic structures emerge as additional ecological processes are incorporated into the model.
+The project deliberately separates the biological model from its spatial representation. The same governing equations are first explored in a one-dimensional reference implementation before being extended to two-dimensional cross-sections and finally to complete three-dimensional stromatolite surfaces. This incremental approach allows increasing geometric complexity to be introduced without changing the underlying biology.
+
+The emphasis is not on reproducing any particular fossil exactly. Instead, the project investigates how increasingly realistic stromatolite morphology emerges as the same biological processes are represented within progressively richer spatial geometries.
 
 In this sense, the work represents an experiment in computational natural history. It sits somewhere between mathematical modelling, Earth system simulation and developmental biology, using code to explore how simple interactions between organisms and their environment can generate the layered structures preserved in the geological record.
 
@@ -43,13 +45,15 @@ The project currently includes:
 - Variable sediment supply
 - Stochastic burial events
 - Water-depth-dependent light attenuation
-- Animated model outputs
+- One-dimensional reference implementation
+- Two-dimensional cross-sectional model
+- Three-dimensional rectangular stromatolite model
 - Parameter-driven experimentation
-- Spatial 2D growth
 
 Future directions may include:
 
-- Spatial 3D growth
+- Circular and domed stromatolite geometries
+- Curvature-dependent growth
 - Hydrodynamic influences on sediment transport
 - Multiple microbial communities
 - Geochemical controls on growth
