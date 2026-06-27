@@ -7,9 +7,9 @@
 # StromatoliteGrowth - Stromatolite Growth Modelling
 
 <figure>
-    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/3d-circular-final-surface-render.png" width="100%">
+    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/3d-circular-domed-final-surface-render.png" width="100%">
     <figcaption>
-        Emergent three-dimensional stromatolite surface produced by the circular masked growth model
+        Emergent three-dimensional domed stromatolite surface produced by the circular domed growth model
     </figcaption>
 </figure>
 
@@ -21,11 +21,13 @@ The work began following a visit to the Oxford University Museum of Natural Hist
 
 The model treats stromatolite formation as a dynamic system in which microbial mat growth competes with sediment accumulation while responding to changing environmental conditions such as light availability, water depth, sediment supply and seasonal variation.
 
-The project deliberately separates the biological model from its spatial representation. The same governing equations are first explored in a one-dimensional reference implementation before being extended to two-dimensional cross-sections, complete three-dimensional surfaces and finally to circular stromatolite colonies.
+The project deliberately separates the biological model from its spatial representation. The same governing equations are first explored in a one-dimensional reference implementation before being extended to two-dimensional cross-sections, complete three-dimensional surfaces, circular stromatolite colonies and ultimately recognisable domed stromatolite morphologies.
 
 This incremental approach allows increasing geometric realism to be introduced without changing the underlying biology. 
 
 The emphasis is not on reproducing any particular fossil exactly. Instead, the project investigates how increasingly realistic stromatolite morphology emerges as the same biological processes are represented within progressively richer spatial geometries. Each implementation therefore adds geometric realism while deliberately preserving the underlying biological model.
+
+The project now demonstrates that a single, interpretable biological model can be carried unchanged from a one-dimensional growth column to a fully three-dimensional domed stromatolite through successive refinements of spatial geometry alone.
 
 In this sense, the work represents an experiment in computational natural history. It sits somewhere between mathematical modelling, Earth system simulation and developmental biology, using code to explore how simple interactions between organisms and their environment can generate the layered structures preserved in the geological record.
 
@@ -37,9 +39,10 @@ Further documentation, including the mathematical model, implementation details,
 
 The project currently includes:
 
+### Biological framework
+
 - Biological growth modelling
 - Sediment deposition and burial
-- Vertical column simulation
 - Layer-by-layer stromatolite development
 - Environmental forcing
 - Seasonal light variation
@@ -47,22 +50,18 @@ The project currently includes:
 - Variable sediment supply
 - Stochastic burial events
 - Water-depth-dependent light attenuation
+
+### Computational implementations
+
 - One-dimensional reference implementation
 - Two-dimensional cross-sectional model
-- Three-dimensional rectangular stromatolite model
-- Three-dimensional circular masked stromatolite model
-- Parameter-driven experimentation
-- Parameter-driven experimentation
+- Three-dimensional rectangular model
+- Three-dimensional circular masked model
+- Three-dimensional circular domed model
 
-Future directions may include:
+### Exploration
 
-- Domed stromatolite morphologies
-- Expanding colony margins
-- Curvature-dependent growth
-- Hydrodynamic influences on sediment transport
-- Multiple microbial communities
-- Geochemical controls on growth
-- Morphological comparison with fossil stromatolites
+- Parameter-driven experimentation
 
 ## Acknowledgements
 
