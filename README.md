@@ -7,7 +7,7 @@
 # StromatoliteGrowth - Stromatolite Growth Modelling
 
 <figure>
-    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/3d-cricular-final-surface-render.png" width="100%">
+    <img src="https://github.com/davewalker5/StromatoliteGrowth/blob/main/diagrams/3d-circular-final-surface-render.png" width="100%">
     <figcaption>
         Emergent three-dimensional stromatolite surface produced by the circular masked growth model
     </figcaption>
