@@ -11,4 +11,4 @@ cd "$PROJECT_ROOT"
 
 . venv/bin/activate
 
-python scripts/build-layer-surfaces.py --input "$1" --output "$2"
+python "$PROJECT_ROOT/src/build-layer-surfaces.py" --input "$1" --output "$2"
