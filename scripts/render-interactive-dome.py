@@ -11,47 +11,61 @@ import plotly.graph_objects as go
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_INPUT = PROJECT_ROOT / "data" / "output" / "3d-circular-domed-final-surface.csv"
-DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "output" / "3d-circular-domed-interactive-surface.html"
+DEFAULT_INPUT = PROJECT_ROOT / "data" / "output" / "3d-circular-domed-layer-surfaces.npz"
+
+
+def require_array(archive: np.lib.npyio.NpzFile, key: str, input_path: Path) -> np.ndarray:
+    """Return a required NPZ array or raise a clear format error."""
+    if key not in archive.files:
+        raise ValueError(f"{input_path} is missing required array: {key}")
+    return archive[key]
 
 
 def load_surface_grid(input_path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Load the saved final surface CSV and reshape it into Plotly grids."""
-    table = np.genfromtxt(input_path, delimiter=",", names=True)
+    """Load the final surface from a browser-ready layer surface NPZ."""
+    with np.load(input_path) as archive:
+        height = require_array(archive, "height_mm", input_path)
 
-    # The renderer is intentionally tied to the saved model output, so fail early
-    # if the CSV no longer has the coordinates, mask and height field it needs.
-    required_columns = {"x_mm", "y_mm", "active", "height_mm"}
-    missing_columns = required_columns.difference(table.dtype.names or ())
-    if missing_columns:
-        missing = ", ".join(sorted(missing_columns))
-        raise ValueError(f"{input_path} is missing required column(s): {missing}")
+        if height.ndim == 3:
+            z_grid = height[-1].astype(np.float32)
+        elif height.ndim == 2:
+            z_grid = height.astype(np.float32)
+        else:
+            raise ValueError(
+                f"{input_path} height_mm must have shape (layers, y, x) or (y, x); "
+                f"got {height.shape}."
+            )
 
-    # Plotly surfaces expect regular 2-D grids. The model output is stored as one
-    # row per grid cell, so rebuild the x/y/z arrays from the coordinate columns.
-    x_values = np.unique(table["x_mm"])
-    y_values = np.unique(table["y_mm"])
-    expected_cells = len(x_values) * len(y_values)
-    if len(table) != expected_cells:
-        raise ValueError(
-            f"{input_path} does not form a complete rectangular grid: "
-            f"found {len(table)} cells, expected {expected_cells}"
+        y_size, x_size = z_grid.shape
+        x_values = (
+            archive["x_mm"].astype(np.float32)
+            if "x_mm" in archive.files
+            else np.arange(x_size, dtype=np.float32)
+        )
+        y_values = (
+            archive["y_mm"].astype(np.float32)
+            if "y_mm" in archive.files
+            else np.arange(y_size, dtype=np.float32)
         )
 
-    x_index = {value: index for index, value in enumerate(x_values)}
-    y_index = {value: index for index, value in enumerate(y_values)}
-    z_grid = np.full((len(y_values), len(x_values)), np.nan)
+        if x_values.shape != (x_size,):
+            raise ValueError(
+                f"{input_path} x_mm shape {x_values.shape} does not match surface width {x_size}."
+            )
+        if y_values.shape != (y_size,):
+            raise ValueError(
+                f"{input_path} y_mm shape {y_values.shape} does not match surface height {y_size}."
+            )
 
-    for row in table:
-        x = row["x_mm"]
-        y = row["y_mm"]
-        height = row["height_mm"]
-        active = row["active"] > 0.5
-
-        # Keep inactive cells as NaN so Plotly leaves the area outside the
-        # circular stromatolite mask transparent instead of drawing a base plane.
-        if active and np.isfinite(height):
-            z_grid[y_index[y], x_index[x]] = height
+        if "active_mask" in archive.files:
+            active_mask = archive["active_mask"].astype(bool)
+            if active_mask.shape != z_grid.shape:
+                raise ValueError(
+                    f"{input_path} active_mask shape {active_mask.shape} "
+                    f"does not match surface shape {z_grid.shape}."
+                )
+            z_grid = z_grid.copy()
+            z_grid[~active_mask] = np.nan
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
     return x_grid, y_grid, z_grid
@@ -171,49 +185,30 @@ def build_figure(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Render the saved domed stromatolite final surface as interactive Plotly HTML."
-    )
-    parser.add_argument(
-        "-i",
-        "--input",
-        type=Path,
-        default=DEFAULT_INPUT,
-        help=f"Final surface CSV to render. Defaults to {DEFAULT_INPUT.relative_to(PROJECT_ROOT)}.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=Path,
-        default=DEFAULT_OUTPUT,
-        help=f"HTML file to write. Defaults to {DEFAULT_OUTPUT.relative_to(PROJECT_ROOT)}.",
-    )
-    parser.add_argument(
-        "-c",
-        "--clean-axes",
-        action="store_true",
-        help="Hide axes, ticks and grid lines for publication-style presentation.",
-    )
-    parser.add_argument(
-        "-d",
-        "--dark-mode",
-        action="store_true",
-        help="Use a black background with light axis and colorbar text.",
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input", type=Path, default=DEFAULT_INPUT,
+                        help="Layer surface NPZ to render")
+    parser.add_argument("-o", "--output", type=Path, default=None,
+                        help="HTML file to write; defaults to input path with .html suffix")
+    parser.add_argument("-c", "--clean-axes", action="store_true",
+                        help="Hide axes, ticks and grid lines for publication-style presentation")
+    parser.add_argument("-d", "--dark-mode", action="store_true",
+                        help="Use a black background with light axis and colorbar text")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    output_path = args.output if args.output is not None else args.input.with_suffix(".html")
 
     x_grid, y_grid, z_grid = load_surface_grid(args.input)
     fig = build_figure(x_grid, y_grid, z_grid, clean_axes=args.clean_axes, dark_mode=args.dark_mode)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Embed Plotly in the file so the render can be opened directly or published
     # as a standalone HTML artefact.
-    fig.write_html(args.output, include_plotlyjs=True, full_html=True)
-    print(f"Saved interactive dome render to {args.output}")
+    fig.write_html(output_path, include_plotlyjs=True, full_html=True)
+    print(f"Saved interactive dome render to {output_path}")
 
 
 if __name__ == "__main__":
