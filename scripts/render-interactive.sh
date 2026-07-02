@@ -11,4 +11,4 @@ cd "$PROJECT_ROOT"
 
 . venv/bin/activate
 
-python "$PROJECT_ROOT/src/render-interactive-dome.py" --dark-mode --input "$1"
+python "$PROJECT_ROOT/src/render-interactive-3d.py" --dark-mode --input "$1"
