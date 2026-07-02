@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0n7sg2m" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.39.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:process id="Process_1qqaofq" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0f7pzz1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Activity_0z9yokm" name="Run the 3D Stromatolite Growth Model Notebook">
+      <bpmn:incoming>Flow_0f7pzz1</bpmn:incoming>
+      <bpmn:outgoing>Flow_17um4gc</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0f8c3kz">
+        <bpmn:targetRef>DataObjectReference_1sk8u4o</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0f7pzz1" sourceRef="StartEvent_1" targetRef="Activity_0z9yokm" />
+    <bpmn:dataObjectReference id="DataObjectReference_1sk8u4o" name="Stratigraphy NPZ File" dataObjectRef="DataObject_1rv6dy1" />
+    <bpmn:dataObject id="DataObject_1rv6dy1" />
+    <bpmn:task id="Activity_065h9xg" name="Run the Layer Surfaces Generator">
+      <bpmn:incoming>Flow_17um4gc</bpmn:incoming>
+      <bpmn:outgoing>Flow_17y7q3d</bpmn:outgoing>
+      <bpmn:property id="Property_12670en" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_08w7uyh">
+        <bpmn:sourceRef>DataObjectReference_1sk8u4o</bpmn:sourceRef>
+        <bpmn:targetRef>Property_12670en</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0vz2ka3">
+        <bpmn:targetRef>DataObjectReference_1rrfrzv</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_17um4gc" sourceRef="Activity_0z9yokm" targetRef="Activity_065h9xg" />
+    <bpmn:dataObjectReference id="DataObjectReference_1rrfrzv" name="Layer Surfaces NPZ File" dataObjectRef="DataObject_00k8nl4" />
+    <bpmn:dataObject id="DataObject_00k8nl4" />
+    <bpmn:task id="Activity_12rya6m" name="Run the Interactive Render Generator">
+      <bpmn:incoming>Flow_17y7q3d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u624al</bpmn:outgoing>
+      <bpmn:property id="Property_0zvs3jh" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_0f4czys">
+        <bpmn:sourceRef>DataObjectReference_1rrfrzv</bpmn:sourceRef>
+        <bpmn:targetRef>Property_0zvs3jh</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_09oood1">
+        <bpmn:targetRef>DataObjectReference_0xkagpy</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_17y7q3d" sourceRef="Activity_065h9xg" targetRef="Activity_12rya6m" />
+    <bpmn:dataObjectReference id="DataObjectReference_0xkagpy" name="3D Visualisation HTML (Standalone Plotly Render)" dataObjectRef="DataObject_0xvepkj" />
+    <bpmn:dataObject id="DataObject_0xvepkj" />
+    <bpmn:task id="Activity_0hievuo" name="View Interactive Render in a Web Browser">
+      <bpmn:incoming>Flow_0u624al</bpmn:incoming>
+      <bpmn:outgoing>Flow_10j1tuy</bpmn:outgoing>
+      <bpmn:property id="Property_0vm7mnw" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_1yfb88n">
+        <bpmn:sourceRef>DataObjectReference_0xkagpy</bpmn:sourceRef>
+        <bpmn:targetRef>Property_0vm7mnw</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0u624al" sourceRef="Activity_12rya6m" targetRef="Activity_0hievuo" />
+    <bpmn:sequenceFlow id="Flow_10j1tuy" sourceRef="Activity_0hievuo" targetRef="Event_0z1mkja" />
+    <bpmn:endEvent id="Event_0z1mkja">
+      <bpmn:incoming>Flow_10j1tuy</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_1cxz9in" />
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="TextAnnotation_0n5cj7r">
+      <bpmn:text>This generates a compact, browser-ready definition of the stromatolite surface at each representative layer</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1pdno91" associationDirection="None" sourceRef="Activity_065h9xg" targetRef="TextAnnotation_0n5cj7r" />
+    <bpmn:textAnnotation id="TextAnnotation_1ix991w">
+      <bpmn:text>One output is the stratigraphy file containing the full per-timestep stratigraphic raster stack</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1doxt0p" associationDirection="None" sourceRef="Activity_0z9yokm" targetRef="TextAnnotation_1ix991w" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1qqaofq">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z9yokm_di" bpmnElement="Activity_0z9yokm">
+        <dc:Bounds x="270" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1sk8u4o_di" bpmnElement="DataObjectReference_1sk8u4o">
+        <dc:Bounds x="302" y="365" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="278" y="422" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_065h9xg_di" bpmnElement="Activity_065h9xg">
+        <dc:Bounds x="430" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1rrfrzv_di" bpmnElement="DataObjectReference_1rrfrzv">
+        <dc:Bounds x="462" y="365" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="443" y="422" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12rya6m_di" bpmnElement="Activity_12rya6m">
+        <dc:Bounds x="590" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_0xkagpy_di" bpmnElement="DataObjectReference_0xkagpy">
+        <dc:Bounds x="622" y="365" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="601" y="422" width="79" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hievuo_di" bpmnElement="Activity_0hievuo">
+        <dc:Bounds x="750" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17ifxbv_di" bpmnElement="Event_0z1mkja">
+        <dc:Bounds x="912" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1pdno91_di" bpmnElement="Association_1pdno91">
+        <di:waypoint x="508" y="200" />
+        <di:waypoint x="550" y="139" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1doxt0p_di" bpmnElement="Association_1doxt0p">
+        <di:waypoint x="341" y="200" />
+        <di:waypoint x="374" y="139" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f7pzz1_di" bpmnElement="Flow_0f7pzz1">
+        <di:waypoint x="218" y="240" />
+        <di:waypoint x="270" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0f8c3kz_di" bpmnElement="DataOutputAssociation_0f8c3kz">
+        <di:waypoint x="320" y="280" />
+        <di:waypoint x="320" y="365" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17um4gc_di" bpmnElement="Flow_17um4gc">
+        <di:waypoint x="370" y="240" />
+        <di:waypoint x="430" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_08w7uyh_di" bpmnElement="DataInputAssociation_08w7uyh">
+        <di:waypoint x="338" y="372" />
+        <di:waypoint x="433" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0vz2ka3_di" bpmnElement="DataOutputAssociation_0vz2ka3">
+        <di:waypoint x="480" y="280" />
+        <di:waypoint x="480" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0n5cj7r_di" bpmnElement="TextAnnotation_0n5cj7r">
+        <dc:Bounds x="530" y="80" width="241" height="59" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1ix991w_di" bpmnElement="TextAnnotation_1ix991w">
+        <dc:Bounds x="260" y="80" width="202" height="59" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_17y7q3d_di" bpmnElement="Flow_17y7q3d">
+        <di:waypoint x="530" y="240" />
+        <di:waypoint x="590" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_0f4czys_di" bpmnElement="DataInputAssociation_0f4czys">
+        <di:waypoint x="498" y="372" />
+        <di:waypoint x="593" y="277" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_09oood1_di" bpmnElement="DataOutputAssociation_09oood1">
+        <di:waypoint x="640" y="280" />
+        <di:waypoint x="640" y="365" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u624al_di" bpmnElement="Flow_0u624al">
+        <di:waypoint x="690" y="240" />
+        <di:waypoint x="750" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1yfb88n_di" bpmnElement="DataInputAssociation_1yfb88n">
+        <di:waypoint x="658" y="373" />
+        <di:waypoint x="759" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10j1tuy_di" bpmnElement="Flow_10j1tuy">
+        <di:waypoint x="850" y="240" />
+        <di:waypoint x="912" y="240" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
